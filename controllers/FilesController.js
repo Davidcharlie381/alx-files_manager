@@ -70,6 +70,14 @@ class FilesController {
       localPath: type === 'folder' ? null : localPath,
     };
 
+    // Check if the uploaded file is an image for thumbnail processing
+    if (file.type === 'image') {
+      await fileQueue.add({
+        userId: user.id,
+        fileId: newFile.id,
+      });
+    }
+
     const result = await dbClient.insertFile(newFile);
 
     return res.status(201).json({
